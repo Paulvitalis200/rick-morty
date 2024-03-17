@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import APIClient, { FetchResponse } from "../services/api-client";
+import APIClient from "../services/api-client";
 import { Character } from "../models/character";
 
 const apiClient = new APIClient<Character>("/character");
@@ -11,11 +11,10 @@ const useCharacters = (page: number) => {
         page: pageParam,
       },
     });
-  return useQuery<FetchResponse<Character>, Error>({
+  return useQuery({
     queryKey: ["characters", page],
     queryFn: fetchCharacters,
     staleTime: 24 * 60 * 60 * 100, //24h
-    keepPreviousData: true,
   });
 };
 
