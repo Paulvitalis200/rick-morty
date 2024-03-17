@@ -1,41 +1,69 @@
-import { Container, Heading, SimpleGrid } from "@chakra-ui/react";
-import CharacterCard from "../components/CharacterCard";
+import { Container, Flex, Heading, IconButton, Stack } from "@chakra-ui/react";
 import useCharacters from "../hooks/useCharacters";
+import CharacterGrid from "../components/CharacterGrid";
+import { useState } from "react";
+import SkeletonGrid from "../components/SkeletonGrid";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const Homepage = () => {
-  const { data } = useCharacters();
+  const [page, setPage] = useState<number>(1);
+  const { data, isLoading } = useCharacters(page);
 
-  console.log("GAMES: ", data);
+  const updatePage = (value: string) => {
+    if (value === "previous") page > 1 ? setPage(page - 1) : setPage(page);
+    else {
+      setPage(page + 1);
+    }
+  };
+
   return (
     <>
       <Container maxW="100%" padding="0">
         <Container paddingTop={"100px"} paddingBottom={"100px"} centerContent>
-          <Heading fontSize={"80px"} color="#1B1A1A" fontWeight={800}>
+          <Heading
+            fontSize={{ base: "40px", sm: "40px", md: "60px", lg: "80px" }}
+            color="#1B1A1A"
+            fontWeight={800}
+          >
             Rick and Morty
           </Heading>
         </Container>
-        <SimpleGrid
-          spacing={2}
-          maxW="100%"
-          bg="#1B1A1A"
-          columns={{ base: 1, sm: 1, md: 4, lg: 4 }}
-          width={"100%"}
-          paddingBottom={"20px"}
-          paddingTop="50px"
-        >
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-          <CharacterCard />
-        </SimpleGrid>
+        <Container bg="#1B1A1A" maxW="100%">
+          <Flex alignItems="center" justifyContent="center">
+            {isLoading && <SkeletonGrid />}
+            {data && <CharacterGrid characters={data.results} />}
+          </Flex>
+          <Flex justifyContent="center">
+            <Stack
+              direction="row"
+              spacing={4}
+              align="center"
+              paddingBottom="20px"
+            >
+              <IconButton
+                isRound={true}
+                variant="solid"
+                bg="white"
+                color="#555555"
+                aria-label="Back"
+                fontSize="20px"
+                icon={<IoIosArrowBack />}
+                onClick={() => updatePage("previous")}
+              />
+              <IconButton
+                isRound={true}
+                variant="solid"
+                bg="white"
+                color="#555555"
+                aria-label="Next"
+                fontSize="20px"
+                icon={<IoIosArrowForward />}
+                onClick={() => updatePage("next")}
+              />
+            </Stack>
+          </Flex>
+        </Container>
       </Container>
-      /
     </>
   );
 };

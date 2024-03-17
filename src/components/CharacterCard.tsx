@@ -1,24 +1,31 @@
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Card, Image, Text } from "@chakra-ui/react";
+import { Character } from "../models/character";
 
-const CharacterCard = () => {
+interface CharacterProps {
+  character: Character;
+}
+
+const CharacterCard = ({ character }: CharacterProps) => {
   return (
-    <Card maxW="md">
-      {/* <CardBody></CardBody> */}
+    <Card
+      maxW="200px"
+      width="200px"
+      height="300px"
+      marginBottom="20px"
+      borderRadius="3px"
+    >
       <Image
         objectFit="cover"
-        src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-        alt="Chakra UI"
+        src={character.image}
+        alt="Character"
+        borderTopRadius="3px"
+        height="80%"
       />
-      <Text fontWeight={600}>Rick Sanchez</Text>
-      <Text fontWeight={300} fontSize="13px">
-        Citadel of Ricks
+      <Text fontWeight={600} marginLeft="25px" color="#555555">
+        {character.name}
+      </Text>
+      <Text fontWeight={300} fontSize="13px" marginLeft="25px" color="#555555">
+        {character.location.name}
       </Text>
     </Card>
   );

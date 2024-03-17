@@ -1,31 +1,21 @@
-// import { FetchResponse } from "../services/api-client";
-// import { useInfiniteQuery } from "@tanstack/react-query";
-// import APIClient from "../services/api-client";
-// import ms from "ms";
-// import useGameQueryStore from "../store";
-// import Game from "../entities/Game";
+import { useQuery } from "@tanstack/react-query";
+import APIClient, { FetchResponse } from "../services/api-client";
+import { Character } from "../models/character";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
-import APIClient from "../services/api-client";
+const apiClient = new APIClient<Character>("/character");
 
-const apiClient = new APIClient("/character");
-
-const useCharacters = () => {
-  //   const gameQuery = useGameQueryStore((s) => s.gameQuery);
-  const fetchCharacters = ({ pageParam = 1 }) =>
+const useCharacters = (page: number) => {
+  const fetchCharacters = ({ pageParam = page }) =>
     apiClient.getAll({
       params: {
         page: pageParam,
       },
     });
-  return useInfiniteQuery<any>({
-    queryKey: ["characters"],
+  return useQuery<FetchResponse<Character>, Error>({
+    queryKey: ["characters", page],
     queryFn: fetchCharacters,
     staleTime: 24 * 60 * 60 * 100, //24h
-    getNextPageParam: (lastPage, allPages) => {
-      //1 -> 2
-      return lastPage.next ? allPages.length + 1 : undefined;
-    },
+    keepPreviousData: true,
   });
 };
 
