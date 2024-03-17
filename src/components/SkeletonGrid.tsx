@@ -1,4 +1,4 @@
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import { SimpleGrid } from "@chakra-ui/react";
 import SkeletonCard from "./SkeletonCard";
 
 const SkeletonGrid = () => {

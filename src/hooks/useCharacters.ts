@@ -5,10 +5,10 @@ import { Character } from "../models/character";
 const apiClient = new APIClient<Character>("/character");
 
 const useCharacters = (page: number) => {
-  const fetchCharacters = ({ pageParam = page }) =>
+  const fetchCharacters = () =>
     apiClient.getAll({
       params: {
-        page: pageParam,
+        page: page,
       },
     });
   return useQuery({
